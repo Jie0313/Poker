@@ -39,6 +39,7 @@ namespace Poker
 
             InitializeComponent();
             InitializePoker();
+            InitializeStyle();
             lblmoney.Text = totalFunds.ToString();
 
             btnDealCard.Enabled = false;
@@ -408,12 +409,16 @@ namespace Poker
             if (multiplier > 0)
             {
                 totalFunds += winAmount - betAmount;
-                MessageBox.Show($"{result}　賠率 x{multiplier}　獲得 {winAmount} 元！", "恭喜！");
+                lblResult.BackColor = Color.FromArgb(20, 50, 30);   // 深綠底
+                lblResult.ForeColor = Color.FromArgb(39, 174, 96);  // 綠字
+                lblResult.Text = $"{result} 獲得{winAmount}元！";
             }
             else
             {
                 totalFunds -= betAmount;
-                MessageBox.Show($"{result}　損失 {betAmount} 元", "很遺憾");
+                lblResult.BackColor = Color.FromArgb(50, 20, 20);   // 深紅底
+                lblResult.ForeColor = Color.FromArgb(231, 76, 60);  // 紅字
+                lblResult.Text = $"{result}　損失{betAmount}元";
             }
 
             lblmoney.Text = totalFunds.ToString();
@@ -432,7 +437,6 @@ namespace Poker
                 totalFunds = 1000000;
                 lblmoney.Text = totalFunds.ToString();
             }
-            lblResult.Text = "";
             txtpourmoney.Text = "";
             for (int i = 0; i < pic.Length; i++)
             {
@@ -534,6 +538,83 @@ namespace Poker
             MessageBox.Show($"已押注 {betAmount} 元", "押注成功");
 
             this.Focus();
+        }
+
+        private void InitializeStyle()
+        {
+            this.BackColor = Color.FromArgb(30, 30, 46);
+
+            // 牌桌
+            grpPoker.BackColor = Color.FromArgb(30, 58, 47);
+            grpPoker.ForeColor = Color.White;
+            grpPoker.Font = new Font("微軟正黑體", 11f, FontStyle.Bold);
+
+            // 下注區
+            grppour.BackColor = Color.FromArgb(30, 30, 46);
+            grppour.ForeColor = Color.White;
+            grppour.Font = new Font("微軟正黑體", 11f, FontStyle.Bold);
+
+            // 功能區
+            grpButton.BackColor = Color.FromArgb(30, 30, 46);
+            grpButton.ForeColor = Color.White;
+            grpButton.Font = new Font("微軟正黑體", 11f, FontStyle.Bold);
+
+            // 下注區內 Label（總資金、押注金額）
+            foreach (Control c in grppour.Controls)
+            {
+                if (c is Label && c != lblmoney)
+                {
+                    c.ForeColor = Color.White;
+                    c.Font = new Font("微軟正黑體", 12f);
+                }
+            }
+
+            lblmoney.BackColor = Color.FromArgb(22, 22, 36);
+            lblmoney.ForeColor = Color.FromArgb(39, 174, 96);
+            lblmoney.Font = new Font("微軟正黑體", 13f, FontStyle.Bold);
+
+            txtpourmoney.BackColor = Color.FromArgb(22, 22, 36);
+            txtpourmoney.ForeColor = Color.White;
+            txtpourmoney.BorderStyle = BorderStyle.FixedSingle;
+            txtpourmoney.Font = new Font("微軟正黑體", 13f);
+
+            btnpour.BackColor = Color.FromArgb(232, 213, 163);
+            btnpour.ForeColor = Color.FromArgb(26, 26, 46);
+            btnpour.FlatStyle = FlatStyle.Flat;
+            btnpour.FlatAppearance.BorderSize = 0;
+            btnpour.Font = new Font("微軟正黑體", 12f, FontStyle.Bold);
+
+            btnDealCard.BackColor = Color.FromArgb(26, 26, 46);
+            btnDealCard.ForeColor = Color.FromArgb(232, 213, 163);
+            btnDealCard.FlatStyle = FlatStyle.Flat;
+            btnDealCard.FlatAppearance.BorderColor = Color.FromArgb(232, 213, 163);
+            btnDealCard.FlatAppearance.BorderSize = 1;
+            btnDealCard.Font = new Font("微軟正黑體", 12f);
+
+            btnChangeCard.BackColor = Color.FromArgb(40, 40, 60);
+            btnChangeCard.ForeColor = Color.White;
+            btnChangeCard.FlatStyle = FlatStyle.Flat;
+            btnChangeCard.FlatAppearance.BorderColor = Color.FromArgb(120, 120, 160);
+            btnChangeCard.FlatAppearance.BorderSize = 1;
+            btnChangeCard.Font = new Font("微軟正黑體", 12f);
+
+            btnCheck.BackColor = Color.FromArgb(40, 40, 60);
+            btnCheck.ForeColor = Color.White;
+            btnCheck.FlatStyle = FlatStyle.Flat;
+            btnCheck.FlatAppearance.BorderColor = Color.FromArgb(120, 120, 160);
+            btnCheck.FlatAppearance.BorderSize = 1;
+            btnCheck.Font = new Font("微軟正黑體", 12f);
+
+            lblResult.BackColor = Color.FromArgb(22, 22, 36);
+            lblResult.ForeColor = Color.FromArgb(232, 213, 163);
+            lblResult.Font = new Font("微軟正黑體", 13f, FontStyle.Bold);
+            lblResult.AutoSize = false;       
+            lblResult.TextAlign = ContentAlignment.MiddleCenter;
+            lblResult.Font = new Font("微軟正黑體", 11f, FontStyle.Bold); 
+            lblResult.BackColor = Color.FromArgb(22, 22, 36);
+            lblResult.ForeColor = Color.FromArgb(232, 213, 163);
+            lblResult.BorderStyle = BorderStyle.FixedSingle;
+
         }
     }
 }
