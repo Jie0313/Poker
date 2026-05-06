@@ -28,6 +28,10 @@ namespace Poker
         /// </summary>
         int[] playerPoker = new int[5];
 
+
+        int totalFunds = 1000000;
+        int betAmount = 0;
+
         #endregion
 
         public frmPoker()
@@ -35,6 +39,11 @@ namespace Poker
 
             InitializeComponent();
             InitializePoker();
+            lblmoney.Text = totalFunds.ToString();
+
+            btnDealCard.Enabled = false;
+            btnChangeCard.Enabled = false;
+            btnCheck.Enabled = false;
         }
 
 
@@ -381,6 +390,56 @@ namespace Poker
             btnCheck.Enabled = false;
 
             btnDealCard.Enabled = true;
+
+            int multiplier = 0;
+
+            if (isRoyalisFlush) multiplier = 250;
+            else if (isStraightFlush) multiplier = 50;
+            else if (isFourOfAKind) multiplier = 25;
+            else if (isFullHouse) multiplier = 9;
+            else if (isFlush) multiplier = 6;
+            else if (isStraight) multiplier = 4;
+            else if (isThreeOfAKind) multiplier = 3;
+            else if (isTwoPair) multiplier = 2;
+            else if (isOnePair) multiplier = 1;
+
+            int winAmount = betAmount * multiplier;
+
+            if (multiplier > 0)
+            {
+                totalFunds += winAmount - betAmount;
+                MessageBox.Show($"{result}　賠率 x{multiplier}　獲得 {winAmount} 元！", "恭喜！");
+            }
+            else
+            {
+                totalFunds -= betAmount;
+                MessageBox.Show($"{result}　損失 {betAmount} 元", "很遺憾");
+            }
+
+            lblmoney.Text = totalFunds.ToString();
+
+            betAmount = 0;
+
+            btnChangeCard.Enabled = false;
+            btnCheck.Enabled = false;
+            btnDealCard.Enabled = false;
+            btnpour.Enabled = true;
+
+            if (totalFunds <= 0)
+            {
+                MessageBox.Show("資金已用盡，遊戲結束！", "Game Over",
+                    MessageBoxButtons.OK, MessageBoxIcon.Information);
+                totalFunds = 1000000;
+                lblmoney.Text = totalFunds.ToString();
+            }
+            lblResult.Text = "";
+            txtpourmoney.Text = "";
+            for (int i = 0; i < pic.Length; i++)
+            {
+                pic[i].Image = GetImage("back");
+                pic[i].Tag = "back";
+                pic[i].Enabled = false;
+            }
         }
 
         /// <summary>
@@ -390,6 +449,7 @@ namespace Poker
         /// <param name="e"></param>
         private void frmPoker_KeyPress(object sender, KeyPressEventArgs e)
         {
+            if (this.ActiveControl is TextBox) return;
             if (this.btnDealCard.Enabled == false)
             {
                 switch(e.KeyChar)
@@ -449,8 +509,31 @@ namespace Poker
                 this.ShowCards();
             }
         }
+
         #endregion
 
+        private void btnpour_Click(object sender, EventArgs e)
+        {
+            if (!int.TryParse(txtpourmoney.Text, out int amount) || amount <= 0)
+            {
+                MessageBox.Show("請輸入有效的押注金額！", "錯誤",
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+            if (amount > totalFunds)
+            {
+                MessageBox.Show("押注金額不可超過總資金！", "錯誤",
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+            betAmount = amount;
+            
+            btnpour.Enabled = false;
+            btnDealCard.Enabled = true;
 
+            MessageBox.Show($"已押注 {betAmount} 元", "押注成功");
+
+
+        }
     }
 }
