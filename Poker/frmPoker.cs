@@ -533,7 +533,7 @@ namespace Poker
 
             MessageBox.Show($"已押注 {betAmount} 元", "押注成功");
 
-
+            this.Focus();
         }
     }
 }
